@@ -4,7 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./app"));
+//import https from 'https';
 const http_1 = __importDefault(require("http"));
+//import fs from 'fs';
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 (0, app_1.default)().then((app) => {
@@ -12,11 +14,11 @@ const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
         definition: {
             openapi: "3.0.0",
             info: {
-                title: "Web Dev 2022 REST API",
-                version: "1.0.0",
-                description: "REST server including authentication using JWT",
+                title: "Web Advanced Application development 2023 REST API",
+                version: "1.0.1",
+                description: "REST server including authentication using JWT and refresh token",
             },
-            servers: [{ url: "http://localhost:3000", }],
+            servers: [{ url: "https://localhost:3000", },],
         },
         apis: ["./src/routes/*.ts"],
     };
@@ -26,10 +28,13 @@ const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
         console.log('development');
         http_1.default.createServer(app).listen(process.env.PORT);
     }
-    // const options2 = {
-    //   key: fs.readFileSync('../client-key.pem'),
-    //   cert: fs.readFileSync('../client-cert.pem')
-    // };
-    // https.createServer(options, app).listen(process.env.HTTPS_PORT);
+    // } else {
+    //   console.log('PRODUCTION');
+    //   const options2 = {
+    //     key: fs.readFileSync('../client-key.pem'),
+    //     cert: fs.readFileSync('../client-cert.pem')
+    //   };
+    //   https.createServer(options2, app).listen(process.env.HTTPS_PORT);
+    // }
 });
 //# sourceMappingURL=server.js.map

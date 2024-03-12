@@ -1,8 +1,6 @@
 import express from "express";
 const router = express.Router();
 import authController from "../controllers/auth_controller";
-
-
 /**
 * @swagger
 * tags:
@@ -10,14 +8,15 @@ import authController from "../controllers/auth_controller";
 *   description: The Authentication API
 */
 
+
 /**
 * @swagger
 * components:
 *   securitySchemes:
-*       bearerAuth:
-*           type: http
-*           scheme: bearer
-*           bearerFormat: JWT
+*     bearerAuth:
+*       type: http
+*       scheme: bearer
+*       bearerFormat: JWT
 */
 
 /**
@@ -60,11 +59,9 @@ import authController from "../controllers/auth_controller";
 *           application/json:
 *             schema:
 *               $ref: '#/components/schemas/User'
-*       400:
-*         description: Bad Request
 */
 router.post("/register", authController.register);
-
+router.post("/google", authController.googleSignin);
 
 /**
 * @swagger
@@ -87,6 +84,7 @@ router.post("/register", authController.register);
 *         refreshToken: '134r2134cr1x3c'
 */
 
+
 /**
 * @swagger
 * /auth/login:
@@ -106,10 +104,6 @@ router.post("/register", authController.register);
 *           application/json:
 *             schema:
 *               $ref: '#/components/schemas/Tokens'
-*       401:
-*         description: Unauthorized
-*       400:
-*         description: Bad Request
 */
 router.post("/login", authController.login);
 
@@ -125,34 +119,8 @@ router.post("/login", authController.login);
 *     responses:
 *       200:
 *         description: logout completed successfully
-*       401:
-*         description: Unauthorized
-*       500:
-*         description: Server Error
 */
 router.get("/logout", authController.logout);
-
-/**
-* @swagger
-* /auth/refreshToken:
-*   get:
-*     summary: get a new access token using the refresh token
-*     tags: [Auth]
-*     description: need to provide the refresh token in the auth header
-*     security:
-*       - bearerAuth: []
-*     responses:
-*       200:
-*         description: The acess & refresh tokens
-*         content:
-*           application/json:
-*             schema:
-*               $ref: '#/components/schemas/Tokens'
-*       401:
-*         description: Unauthorized
-*       500:
-*         description: Server Error
-*/
 router.get("/refresh", authController.refresh);
 
 export default router;

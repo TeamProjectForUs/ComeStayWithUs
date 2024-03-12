@@ -16,10 +16,10 @@ const auth_controller_1 = __importDefault(require("../controllers/auth_controlle
 * @swagger
 * components:
 *   securitySchemes:
-*       bearerAuth:
-*           type: http
-*           scheme: bearer
-*           bearerFormat: JWT
+*     bearerAuth:
+*       type: http
+*       scheme: bearer
+*       bearerFormat: JWT
 */
 /**
 * @swagger
@@ -60,10 +60,9 @@ const auth_controller_1 = __importDefault(require("../controllers/auth_controlle
 *           application/json:
 *             schema:
 *               $ref: '#/components/schemas/User'
-*       400:
-*         description: Bad Request
 */
 router.post("/register", auth_controller_1.default.register);
+router.post("/google", auth_controller_1.default.googleSignin);
 /**
 * @swagger
 * components:
@@ -103,10 +102,6 @@ router.post("/register", auth_controller_1.default.register);
 *           application/json:
 *             schema:
 *               $ref: '#/components/schemas/Tokens'
-*       401:
-*         description: Unauthorized
-*       400:
-*         description: Bad Request
 */
 router.post("/login", auth_controller_1.default.login);
 /**
@@ -121,33 +116,8 @@ router.post("/login", auth_controller_1.default.login);
 *     responses:
 *       200:
 *         description: logout completed successfully
-*       401:
-*         description: Unauthorized
-*       500:
-*         description: Server Error
 */
 router.get("/logout", auth_controller_1.default.logout);
-/**
-* @swagger
-* /auth/refreshToken:
-*   get:
-*     summary: get a new access token using the refresh token
-*     tags: [Auth]
-*     description: need to provide the refresh token in the auth header
-*     security:
-*       - bearerAuth: []
-*     responses:
-*       200:
-*         description: The acess & refresh tokens
-*         content:
-*           application/json:
-*             schema:
-*               $ref: '#/components/schemas/Tokens'
-*       401:
-*         description: Unauthorized
-*       500:
-*         description: Server Error
-*/
 router.get("/refresh", auth_controller_1.default.refresh);
 exports.default = router;
 //# sourceMappingURL=auth_route.js.map
