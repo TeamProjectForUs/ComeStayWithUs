@@ -4,6 +4,11 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { OAuth2Client } from 'google-auth-library';
 import { Document } from 'mongoose';
+import user_model from '../models/user_model';
+
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const client = new OAuth2Client();
 const googleSignin = async (req: Request, res: Response) => {
@@ -135,6 +140,17 @@ const logout = async (req: Request, res: Response) => {
     });
 }
 
+
+const me = async (req: Request, res: Response) => {
+    const userId = req.user._id!
+     try {
+        const user = await user_model.findById(userId)
+        return res.status(200).json(user)
+     } catch(e) { 
+        return res.sendStatus(401);
+     }
+}
+
 const refresh = async (req: Request, res: Response) => {
     const authHeader = req.headers['authorization'];
     const refreshToken = authHeader && authHeader.split(' ')[1]; // Bearer <token>
@@ -171,5 +187,6 @@ export default {
     register,
     login,
     logout,
+    me,
     refresh
 }
