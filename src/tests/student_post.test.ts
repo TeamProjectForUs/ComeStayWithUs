@@ -2,14 +2,14 @@ import { Express } from "express";
 import request from "supertest";
 import initApp from "../app";
 import mongoose from "mongoose";
-import StudentPost, { IStudentPost } from "../models/student_post_model";
+import StudentPost, { IPost } from "../models/user_post_model";
 import User, { IUser } from "../models/user_model";
 
 let app: Express;
 const user: IUser = {
   email: "test@student.post.test",
   password: "1234567890",
-}
+} as any // fix typing to match IUser
 let accessToken = "";
 
 beforeAll(async () => {
@@ -28,14 +28,14 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
-const post1: IStudentPost = {
+const post1: IPost = {
   title: "title1",
   message: "message1",
-  owner: "1234567890",
-};
+  owner: "1234567890" as any,
+} as any; // fix typing to match IPost
 
 describe("Student post tests", () => {
-  const addStudentPost = async (post: IStudentPost) => {
+  const addStudentPost = async (post: IPost) => {
     const response = await request(app)
       .post("/studentpost")
       .set("Authorization", "JWT " + accessToken)

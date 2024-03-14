@@ -1,17 +1,29 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import { IPost } from "./user_post_model";
 
 export interface IUser {
   email: string;
   password: string;
   imgUrl?: string;
   _id?: string;
+  posts: (Schema.Types.ObjectId | IPost)[]
   refreshTokens?: string[];
+  first_name: string
+  last_name: string
 }
 
 const userSchema = new mongoose.Schema<IUser>({
   email: {
     type: String,
     required: true,
+  },
+  first_name:  {
+    type: String,
+    required:true
+  },
+  last_name:  {
+    type: String,
+    required:true
   },
   password: {
     type: String,
@@ -20,6 +32,8 @@ const userSchema = new mongoose.Schema<IUser>({
   imgUrl: {
     type: String,
   },
+
+  posts: [{type: Schema.Types.ObjectId, ref:"User"}],
   refreshTokens: {
     type: [String],
     required: false,
