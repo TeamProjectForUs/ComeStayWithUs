@@ -18,7 +18,7 @@ const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
                 version: "1.0.1",
                 description: "REST server including authentication using JWT and refresh token",
             },
-            servers: [{ url: "https://localhost:3000", },],
+            servers: [{ url: "http://localhost:3000", },],
         },
         apis: ["./src/routes/*.ts"],
     };
