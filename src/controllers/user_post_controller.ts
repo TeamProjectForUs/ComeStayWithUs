@@ -29,7 +29,7 @@ class StudentPostController extends BaseController<IPost> {
         try {
             let post = await this.model.create(req.body);
             post = await post.populate("owner")
-            await user_model.findByIdAndUpdate({$push: {  posts: post._id}})
+            await user_model.findByIdAndUpdate(_id,{$push: {  posts: post._id}})
             res.status(201).send(post);
         } catch (err) {
             console.log(err);

@@ -46,6 +46,11 @@ class PostCommentController extends base_controller_1.BaseController {
     deleteById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const comment_ = yield this.model.findById(req.params.id).populate("post");
+                if (comment_.comment_owner.toString() !== req.user._id.toString()
+                    && comment_.post.owner.toString() !== req.user._id.toString()) {
+                    res.status(401).send("Unauthorized");
+                }
                 const comment = yield this.model.findByIdAndDelete(req.params.id);
                 yield user_post_model_1.default.findByIdAndUpdate(comment.value.post, { $pull: { comments: req.params.id } });
                 res.status(201).send(comment);

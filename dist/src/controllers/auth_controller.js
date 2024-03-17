@@ -60,16 +60,12 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         const salt = yield bcrypt_1.default.genSalt(10);
         const encryptedPassword = yield bcrypt_1.default.hash(password, salt);
-        const rs2 = yield user_model_1.default.create({
-            'email': email,
-            'password': encryptedPassword,
-            'imgUrl': imgUrl
-        });
+        const rs2 = yield user_model_1.default.create(Object.assign(Object.assign({}, req.body), { 'email': email, 'password': encryptedPassword, 'imgUrl': imgUrl }));
         const tokens = yield generateTokens(rs2);
         res.status(201).send(Object.assign({ email: rs2.email, _id: rs2._id, imgUrl: rs2.imgUrl }, tokens));
     }
     catch (err) {
-        return res.status(400).send("error missing email or password");
+        return res.status(400).send(err.message);
     }
 });
 const generateTokens = (user) => __awaiter(void 0, void 0, void 0, function* () {
@@ -139,7 +135,7 @@ const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 const me = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.user._id;
     try {
-        const user = yield user_model_2.default.findById(userId);
+        const user = yield user_model_2.default.findById(userId).populate("posts");
         return res.status(200).json(user);
     }
     catch (e) {
@@ -148,16 +144,15 @@ const me = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const refresh = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const authHeader = req.headers['authorization'];
-    const refreshToken = authHeader && authHeader.split(' ')[1]; // Bearer <token>
+    const refreshToken = authHeader && authHeader.split('Bearer ')[1]; // Bearer <token>
     if (refreshToken == null)
         return res.sendStatus(401);
     jsonwebtoken_1.default.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, user) => __awaiter(void 0, void 0, void 0, function* () {
         if (err) {
-            console.log(err);
             return res.sendStatus(401);
         }
         try {
-            const userDb = yield user_model_1.default.findOne({ '_id': user._id });
+            const userDb = yield user_model_1.default.findById(user._id);
             if (!userDb.refreshTokens || !userDb.refreshTokens.includes(refreshToken)) {
                 userDb.refreshTokens = [];
                 yield userDb.save();

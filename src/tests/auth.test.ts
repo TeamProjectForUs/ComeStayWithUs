@@ -3,11 +3,17 @@ import initApp from "../app";
 import mongoose from "mongoose";
 import { Express } from "express";
 import User from "../models/user_model";
+import dotenv from 'dotenv'
 
 let app: Express;
 const user = {
   email: "testUser@test.com",
   password: "1234567890",
+  imgUrl: "https://i.ibb.co/zJM6dTN/dog-png-22667.png",
+  posts: [],
+  refreshTokens: [],
+  first_name: "asi",
+  last_name: "levi"
 }
 
 beforeAll(async () => {
@@ -57,21 +63,21 @@ describe("Auth tests", () => {
   });
 
   test("Test forbidden access without token", async () => {
-    const response = await request(app).get("/student");
+    const response = await request(app).get("/auth/me");
     expect(response.statusCode).toBe(401);
   });
 
   test("Test access with valid token", async () => {
     const response = await request(app)
-      .get("/student")
-      .set("Authorization", "JWT " + accessToken);
+      .get("/auth/me")
+      .set("Authorization", "Bearer " + accessToken);
     expect(response.statusCode).toBe(200);
   });
 
   test("Test access with invalid token", async () => {
     const response = await request(app)
-      .get("/student")
-      .set("Authorization", "JWT 1" + accessToken);
+      .get("/auth/me")
+      .set("Authorization", "Bearer 1" + accessToken);
     expect(response.statusCode).toBe(401);
   });
 
@@ -81,15 +87,15 @@ describe("Auth tests", () => {
     await new Promise(resolve => setTimeout(() => resolve("done"), 5000));
 
     const response = await request(app)
-      .get("/student")
-      .set("Authorization", "JWT " + accessToken);
+      .get("/auth/me")
+      .set("Authorization", "Bearer " + accessToken);
     expect(response.statusCode).not.toBe(200);
   });
 
   test("Test refresh token", async () => {
     const response = await request(app)
       .get("/auth/refresh")
-      .set("Authorization", "JWT " + refreshToken)
+      .set("Authorization", "Bearer " + refreshToken)
       .send();
     expect(response.statusCode).toBe(200);
     expect(response.body.accessToken).toBeDefined();
@@ -99,22 +105,22 @@ describe("Auth tests", () => {
     newRefreshToken = response.body.refreshToken;
 
     const response2 = await request(app)
-      .get("/student")
-      .set("Authorization", "JWT " + newAccessToken);
+      .get("/auth/me")
+      .set("Authorization", "Bearer " + newAccessToken);
     expect(response2.statusCode).toBe(200);
   });
 
   test("Test double use of refresh token", async () => {
     const response = await request(app)
       .get("/auth/refresh")
-      .set("Authorization", "JWT " + refreshToken)
+      .set("Authorization", "Bearer " + refreshToken)
       .send();
     expect(response.statusCode).not.toBe(200);
 
     //verify that the new token is not valid as well
     const response1 = await request(app)
       .get("/auth/refresh")
-      .set("Authorization", "JWT " + newRefreshToken)
+      .set("Authorization", "Bearer " + newRefreshToken)
       .send();
     expect(response1.statusCode).not.toBe(200);
   });

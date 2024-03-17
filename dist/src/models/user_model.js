@@ -29,6 +29,14 @@ const userSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
+    first_name: {
+        type: String,
+        required: true
+    },
+    last_name: {
+        type: String,
+        required: true
+    },
     password: {
         type: String,
         required: true,
@@ -36,7 +44,7 @@ const userSchema = new mongoose_1.default.Schema({
     imgUrl: {
         type: String,
     },
-    posts: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "User" }],
+    posts: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Post" }],
     refreshTokens: {
         type: [String],
         required: false,

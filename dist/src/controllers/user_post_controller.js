@@ -44,7 +44,7 @@ class StudentPostController extends base_controller_1.BaseController {
             try {
                 let post = yield this.model.create(req.body);
                 post = yield post.populate("owner");
-                yield user_model_1.default.findByIdAndUpdate({ $push: { posts: post._id } });
+                yield user_model_1.default.findByIdAndUpdate(_id, { $push: { posts: post._id } });
                 res.status(201).send(post);
             }
             catch (err) {
@@ -67,6 +67,10 @@ class StudentPostController extends base_controller_1.BaseController {
     deleteById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const post_ = yield this.model.findById(req.params.id);
+                if (post_.owner.toString() !== req.user._id.toString()) {
+                    return res.status(401).json("Unauthorized");
+                }
                 const post = yield this.model.findByIdAndDelete(req.params.id);
                 yield user_model_1.default.findByIdAndUpdate(req.user._id, { $pull: { posts: req.params.id } });
                 res.status(201).send(post);

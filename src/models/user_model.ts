@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema<IUser>({
     type: String,
   },
 
-  posts: [{type: Schema.Types.ObjectId, ref:"User"}],
+  posts: [{type: Schema.Types.ObjectId, ref:"Post"}],
   refreshTokens: {
     type: [String],
     required: false,
