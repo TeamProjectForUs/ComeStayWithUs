@@ -16,6 +16,9 @@ const user_model_1 = __importDefault(require("../models/user_model"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const google_auth_library_1 = require("google-auth-library");
+const user_model_2 = __importDefault(require("../models/user_model"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const client = new google_auth_library_1.OAuth2Client();
 const googleSignin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.body);
@@ -133,6 +136,16 @@ const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
     }));
 });
+const me = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.user._id;
+    try {
+        const user = yield user_model_2.default.findById(userId);
+        return res.status(200).json(user);
+    }
+    catch (e) {
+        return res.sendStatus(401);
+    }
+});
 const refresh = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const authHeader = req.headers['authorization'];
     const refreshToken = authHeader && authHeader.split(' ')[1]; // Bearer <token>
@@ -170,6 +183,7 @@ exports.default = {
     register,
     login,
     logout,
+    me,
     refresh
 };
 //# sourceMappingURL=auth_controller.js.map

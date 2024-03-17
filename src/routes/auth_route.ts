@@ -1,6 +1,7 @@
 import express from "express";
 const router = express.Router();
 import authController from "../controllers/auth_controller";
+import authMiddleware from "../common/auth_middleware";
 /**
 * @swagger
 * tags:
@@ -60,8 +61,8 @@ import authController from "../controllers/auth_controller";
 *             schema:
 *               $ref: '#/components/schemas/User'
 */
-router.post("/register", authController.register);
-router.post("/google", authController.googleSignin);
+router.post("/register", authController.register.bind(authController));
+router.post("/google", authController.googleSignin.bind(authController));
 
 /**
 * @swagger
@@ -105,7 +106,8 @@ router.post("/google", authController.googleSignin);
 *             schema:
 *               $ref: '#/components/schemas/Tokens'
 */
-router.post("/login", authController.login);
+router.post("/login", authController.login.bind(authController));
+router.get("/me", authMiddleware, authController.me.bind(authController));
 
 /**
 * @swagger
@@ -120,7 +122,7 @@ router.post("/login", authController.login);
 *       200:
 *         description: logout completed successfully
 */
-router.get("/logout", authController.logout);
-router.get("/refresh", authController.refresh);
+router.get("/logout", authController.logout.bind(authController));
+router.get("/refresh", authController.refresh.bind(authController));
 
 export default router;

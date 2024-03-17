@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const auth_controller_1 = __importDefault(require("../controllers/auth_controller"));
+const auth_middleware_1 = __importDefault(require("../common/auth_middleware"));
 /**
 * @swagger
 * tags:
@@ -61,8 +62,8 @@ const auth_controller_1 = __importDefault(require("../controllers/auth_controlle
 *             schema:
 *               $ref: '#/components/schemas/User'
 */
-router.post("/register", auth_controller_1.default.register);
-router.post("/google", auth_controller_1.default.googleSignin);
+router.post("/register", auth_controller_1.default.register.bind(auth_controller_1.default));
+router.post("/google", auth_controller_1.default.googleSignin.bind(auth_controller_1.default));
 /**
 * @swagger
 * components:
@@ -103,7 +104,8 @@ router.post("/google", auth_controller_1.default.googleSignin);
 *             schema:
 *               $ref: '#/components/schemas/Tokens'
 */
-router.post("/login", auth_controller_1.default.login);
+router.post("/login", auth_controller_1.default.login.bind(auth_controller_1.default));
+router.get("/me", auth_middleware_1.default, auth_controller_1.default.me.bind(auth_controller_1.default));
 /**
 * @swagger
 * /auth/logout:
@@ -117,7 +119,7 @@ router.post("/login", auth_controller_1.default.login);
 *       200:
 *         description: logout completed successfully
 */
-router.get("/logout", auth_controller_1.default.logout);
-router.get("/refresh", auth_controller_1.default.refresh);
+router.get("/logout", auth_controller_1.default.logout.bind(auth_controller_1.default));
+router.get("/refresh", auth_controller_1.default.refresh.bind(auth_controller_1.default));
 exports.default = router;
 //# sourceMappingURL=auth_route.js.map

@@ -23,4 +23,5 @@ router.post('/', upload.single("file"), function (req, res) {
     console.log("router.post(/file: " + base + req.file.path)
     res.status(200).send({ url: base + req.file.path })
 });
+
 export = router;

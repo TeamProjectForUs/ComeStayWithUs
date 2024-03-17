@@ -24,31 +24,65 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const userSchema = new mongoose_1.default.Schema({
-    email: {
-        type: String,
-        required: true,
-    },
-    first_name: {
-        type: String,
-        required: true
-    },
-    last_name: {
-        type: String,
-        required: true
-    },
-    password: {
+const postScheme = new mongoose_1.default.Schema({
+    title: {
         type: String,
         required: true,
     },
     imgUrl: {
         type: String,
-    },
-    posts: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "User" }],
-    refreshTokens: {
-        type: [String],
         required: false,
+        default: "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
     },
+    message: {
+        type: String,
+        required: true,
+    },
+    owner: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
+    post_owner_first_name: {
+        type: String,
+        required: true
+    },
+    post_owner_last_name: {
+        type: String,
+        required: true
+    },
+    date_start: {
+        type: Date,
+        required: true
+    },
+    date_end: {
+        type: Date,
+        required: true
+    },
+    location: {
+        type: String,
+        required: true
+    },
+    kosher_home: {
+        type: Boolean,
+        required: true
+    },
+    shabat_save: {
+        type: Boolean,
+        required: true
+    },
+    animals_home: {
+        type: Boolean,
+        required: true
+    },
+    handicap_home: {
+        type: Boolean,
+        required: true
+    },
+    comments: [{
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: "Comment"
+        }]
 });
-exports.default = mongoose_1.default.model("User", userSchema);
-//# sourceMappingURL=user_model.js.map
+exports.default = mongoose_1.default.model("Post", postScheme);
+//# sourceMappingURL=user_post_model.js.map

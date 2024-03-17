@@ -1,15 +1,18 @@
-import express from "express";
-const router = express.Router();
-import studentPostController from "../controllers/student_post_controller";
-import authMiddleware from "../common/auth_middleware";
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const router = express_1.default.Router();
+const user_post_controller_1 = __importDefault(require("../controllers/user_post_controller"));
+const auth_middleware_1 = __importDefault(require("../common/auth_middleware"));
 /**
  * @swagger
  * tags:
  *   name: StudentPosts
  *   description: API endpoints for managing student posts
  */
-
 /**
  * @swagger
  * components:
@@ -19,7 +22,6 @@ import authMiddleware from "../common/auth_middleware";
  *       scheme: bearer
  *       bearerFormat: JWT
  */
-
 /**
  * @swagger
  * /student-posts:
@@ -32,9 +34,7 @@ import authMiddleware from "../common/auth_middleware";
  *       401:
  *         description: Unauthorized
  */
-
-router.get("/", studentPostController.get.bind(studentPostController));
-
+router.get("/", user_post_controller_1.default.get.bind(user_post_controller_1.default));
 /**
  * @swagger
  * /student-posts/{id}:
@@ -56,9 +56,7 @@ router.get("/", studentPostController.get.bind(studentPostController));
  *       404:
  *         description: Student post not found
  */
-
-router.get("/:id", studentPostController.getById.bind(studentPostController));
-
+router.get("/:id", user_post_controller_1.default.getById.bind(user_post_controller_1.default));
 /**
  * @swagger
  * /student-posts:
@@ -73,9 +71,7 @@ router.get("/:id", studentPostController.getById.bind(studentPostController));
  *       401:
  *         description: Unauthorized
  */
-
-router.post("/", authMiddleware, studentPostController.post.bind(studentPostController));
-
+router.post("/", auth_middleware_1.default, user_post_controller_1.default.post.bind(user_post_controller_1.default));
 /**
  * @swagger
  * /student-posts/{id}:
@@ -99,9 +95,7 @@ router.post("/", authMiddleware, studentPostController.post.bind(studentPostCont
  *       404:
  *         description: Student post not found
  */
-
-router.put("/:id", authMiddleware, studentPostController.putById.bind(studentPostController));
-
+router.put("/:id", auth_middleware_1.default, user_post_controller_1.default.putById.bind(user_post_controller_1.default));
 /**
  * @swagger
  * /student-posts/{id}:
@@ -125,7 +119,6 @@ router.put("/:id", authMiddleware, studentPostController.putById.bind(studentPos
  *       404:
  *         description: Student post not found
  */
-
-router.delete("/:id", authMiddleware, studentPostController.deleteById.bind(studentPostController));
-
-export default router;
+router.delete("/:id", auth_middleware_1.default, user_post_controller_1.default.deleteById.bind(user_post_controller_1.default));
+exports.default = router;
+//# sourceMappingURL=user_post_route.js.map
