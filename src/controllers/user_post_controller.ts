@@ -11,11 +11,22 @@ class StudentPostController extends BaseController<IPost> {
     
     async get(req: Request, res: Response) {
         try {
+            const populateList = [
+                {
+                    path: "owner"
+                },
+                {
+                    path: "comments",
+                    populate: {
+                        path: "comment_owner"
+                    }
+                }
+            ]
             if (req.query.name) {
-                const posts = await this.model.find({ name: req.query.name }).populate("owner");
+                const posts = await this.model.find(populateList);
                 res.send(posts);
             } else {
-                const posts = await this.model.find().populate("owner");;
+                const posts = await this.model.find().populate(populateList);;
                 res.send(posts);
             }
         } catch (err) {

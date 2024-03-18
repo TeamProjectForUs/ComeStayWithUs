@@ -22,12 +22,23 @@ class StudentPostController extends base_controller_1.BaseController {
     get(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const populateList = [
+                    {
+                        path: "owner"
+                    },
+                    {
+                        path: "comments",
+                        populate: {
+                            path: "comment_owner"
+                        }
+                    }
+                ];
                 if (req.query.name) {
-                    const posts = yield this.model.find({ name: req.query.name }).populate("owner");
+                    const posts = yield this.model.find(populateList);
                     res.send(posts);
                 }
                 else {
-                    const posts = yield this.model.find().populate("owner");
+                    const posts = yield this.model.find().populate(populateList);
                     ;
                     res.send(posts);
                 }

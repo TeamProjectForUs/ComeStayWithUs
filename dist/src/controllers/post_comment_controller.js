@@ -24,7 +24,7 @@ class PostCommentController extends base_controller_1.BaseController {
             const _id = req.user._id;
             req.body.owner = _id;
             const message = req.body.message;
-            const owner_name = req.body.owner_name;
+            const owner_name = req.body.comment_owner_name;
             const postId = req.params.postId;
             try {
                 let comment = yield this.model.create({
@@ -33,7 +33,7 @@ class PostCommentController extends base_controller_1.BaseController {
                     comment_owner_name: owner_name,
                     post: postId
                 });
-                comment = yield comment.populate("owner");
+                comment = yield comment.populate("comment_owner");
                 yield user_post_model_1.default.findByIdAndUpdate(postId, { $push: { comments: comment._id } });
                 res.status(201).send(comment);
             }
