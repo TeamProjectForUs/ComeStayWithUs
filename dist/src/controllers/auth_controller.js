@@ -142,12 +142,12 @@ const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const rs = yield user_model_1.default.findByIdAndUpdate(req.user._id, req.body.user, { returnOriginal: false })
             .populate({
             path: "posts",
-            populate: {
-                path: "comments",
-                populate: {
-                    path: "comment_owner"
-                }
-            }
+            populate: [{
+                    path: "comments",
+                    populate: {
+                        path: "comment_owner"
+                    }
+                }, { path: "owner" }]
         });
         res.status(200).send(rs);
     }
@@ -160,12 +160,12 @@ const me = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield user_model_2.default.findById(userId).populate({
             path: "posts",
-            populate: {
-                path: "comments",
-                populate: {
-                    path: "comment_owner"
-                }
-            }
+            populate: [{
+                    path: "comments",
+                    populate: {
+                        path: "comment_owner"
+                    }
+                }, { path: "owner" }]
         });
         return res.status(200).json(user);
     }

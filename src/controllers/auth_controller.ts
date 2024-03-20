@@ -151,12 +151,12 @@ const editUser = async(req: Request, res: Response) => {
         const rs = await User.findByIdAndUpdate(req.user._id, req.body.user, {returnOriginal:false})
         .populate({
             path: "posts",
-            populate: {
+            populate: [{
                 path: "comments",
                 populate: {
                     path: "comment_owner"
                 }
-            }
+            }, {path: "owner"}]
         });
         res.status(200).send(rs);
     } catch(e) {
@@ -169,12 +169,12 @@ const me = async (req: Request, res: Response) => {
      try {
         const user = await user_model.findById(userId).populate({
             path: "posts",
-            populate: {
+            populate:[{
                 path: "comments",
                 populate: {
                     path: "comment_owner"
                 }
-            }
+            }, {path: "owner"}]
         })
         return res.status(200).json(user)
      } catch(e) { 
