@@ -61,6 +61,7 @@ const register = async (req: Request, res: Response) => {
         const encryptedPassword = await bcrypt.hash(password, salt);
         const rs2 = await User.create(
             {
+                ...req.body,
                 'email': email,
                 'password': encryptedPassword,
                 'imgUrl': imgUrl
@@ -73,8 +74,8 @@ const register = async (req: Request, res: Response) => {
                 imgUrl: rs2.imgUrl,
                 ...tokens
             })
-    } catch (err) {
-        return res.status(400).send("error missing email or password");
+    } catch (err:any) {
+        return res.status(400).send(err.message);
     }
 }
 
@@ -140,11 +141,41 @@ const logout = async (req: Request, res: Response) => {
     });
 }
 
+const editUser = async(req: Request, res: Response) => {
+    try {
+        if(req.body.editedPass) {
+            const salt = await bcrypt.genSalt(10);
+            const encryptedPassword = await bcrypt.hash(req.body.user.password, salt);
+            req.body.user.password = encryptedPassword
+        }
+        const rs = await User.findByIdAndUpdate(req.user._id, req.body.user, {returnOriginal:false})
+        .populate({
+            path: "posts",
+            populate: [{
+                path: "comments",
+                populate: {
+                    path: "comment_owner"
+                }
+            }, {path: "owner"}]
+        });
+        res.status(200).send(rs);
+    } catch(e) {
+        return res.status(400).send(e.message);
+    }
+}
 
 const me = async (req: Request, res: Response) => {
     const userId = req.user._id!
      try {
-        const user = await user_model.findById(userId)
+        const user = await user_model.findById(userId).populate({
+            path: "posts",
+            populate:[{
+                path: "comments",
+                populate: {
+                    path: "comment_owner"
+                }
+            }, {path: "owner"}]
+        })
         return res.status(200).json(user)
      } catch(e) { 
         return res.sendStatus(401);
@@ -153,15 +184,15 @@ const me = async (req: Request, res: Response) => {
 
 const refresh = async (req: Request, res: Response) => {
     const authHeader = req.headers['authorization'];
-    const refreshToken = authHeader && authHeader.split(' ')[1]; // Bearer <token>
-    if (refreshToken == null) return res.sendStatus(401);
+    const refreshToken = authHeader && authHeader.split('Bearer ')[1]; // Bearer <token>
+    if (refreshToken == null) 
+        return res.sendStatus(401);
     jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, async (err, user: { '_id': string }) => {
         if (err) {
-            console.log(err);
             return res.sendStatus(401);
         }
         try {
-            const userDb = await User.findOne({ '_id': user._id });
+            const userDb = await User.findById(user._id);
             if (!userDb.refreshTokens || !userDb.refreshTokens.includes(refreshToken)) {
                 userDb.refreshTokens = [];
                 await userDb.save();
@@ -188,5 +219,6 @@ export default {
     login,
     logout,
     me,
-    refresh
+    refresh,
+    editUser
 }

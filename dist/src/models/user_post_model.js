@@ -43,13 +43,17 @@ const postScheme = new mongoose_1.default.Schema({
         ref: "User",
         required: true,
     },
-    post_owner_first_name: {
+    post_owner_email: {
         type: String,
-        required: true
+        required: true,
     },
-    post_owner_last_name: {
+    post_owner_phone: {
         type: String,
-        required: true
+        required: true,
+    },
+    capacity: {
+        type: Number,
+        required: true,
     },
     date_start: {
         type: Date,
@@ -66,6 +70,10 @@ const postScheme = new mongoose_1.default.Schema({
     kosher_home: {
         type: Boolean,
         required: true
+    },
+    created_at: {
+        type: Date,
+        required: false
     },
     shabat_save: {
         type: Boolean,

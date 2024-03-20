@@ -29,10 +29,6 @@ const commentScheme = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
-    comment_owner_name: {
-        type: String,
-        required: true,
-    },
     comment_owner: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: "User"

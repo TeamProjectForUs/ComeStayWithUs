@@ -1,16 +1,14 @@
-import env from "dotenv";
-env.config();
+import dotenv from "dotenv";
 import express, { Express } from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import studentPostRoute from "./routes/user_post_route";
 import studentPostCommentRoute from "./routes/post_comment_route";
-
+import cors from 'cors'
 import authRoute from "./routes/auth_route";
 import fileRoute from "./routes/file_route";
 
 const initApp = (): Promise<Express> => {
-
   const promise = new Promise<Express>((resolve) => {
     const db = mongoose.connection;
     db.once("open", () => console.log("Connected to Database"));
@@ -18,15 +16,9 @@ const initApp = (): Promise<Express> => {
     const url = process.env.DB_URL;
     mongoose.connect(url!).then(() => {
       const app = express();
-      app.use(bodyParser.json());
-      app.use(bodyParser.urlencoded({ extended: true }));
-      app.use((req, res, next) => {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Methods", "*");
-        res.header("Access-Control-Allow-Headers", "*");
-        res.header("Access-Control-Allow-Credentials", "true");
-        next();
-      })
+      app.use(express.json());
+      app.use(express.urlencoded({ extended: true }));
+      app.use(cors())
       app.use("/post", studentPostRoute);
       app.use("/postComment", studentPostCommentRoute);
       app.use("/auth", authRoute);

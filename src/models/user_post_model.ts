@@ -7,9 +7,11 @@ export interface IPost {
   message: string;
   owner: Schema.Types.ObjectId | IUser;
   comments: (Schema.Types.ObjectId | IComment)[];
-  post_owner_first_name: string,
-  post_owner_last_name: string,
+  post_owner_email: string,
+  post_owner_phone: string,
+  capacity: number,
   date_start: Date,
+  created_at: Date,
   date_end: Date,
   imgUrl?: string,
   location: string,
@@ -38,13 +40,17 @@ const postScheme = new mongoose.Schema<IPost>({
     ref: "User",
     required: true,
   },
-  post_owner_first_name: {
+  post_owner_email: {
     type: String,
-    required:true
+    required: true,
   },
-  post_owner_last_name: {
+  post_owner_phone: {
     type: String,
-    required:true
+    required: true,
+  },
+  capacity: {
+    type: Number,
+    required: true,
   },
   date_start: {
     type: Date,
@@ -61,6 +67,10 @@ const postScheme = new mongoose.Schema<IPost>({
   kosher_home: {
     type: Boolean,
     required:true
+  },
+  created_at: {
+    type:Date,
+    required:false
   },
   shabat_save: {
     type: Boolean,

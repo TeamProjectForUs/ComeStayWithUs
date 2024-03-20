@@ -22,12 +22,16 @@ class UserPostController extends base_controller_1.BaseController {
     get(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const populate = [{
+                        path: "owner"
+                    }, { path: "comments", populate: { path: 'comment_owner' } }];
                 if (req.query.name) {
-                    const posts = yield this.model.find({ name: req.query.name }).populate("owner");
+                    const posts = yield this.model.find({ name: req.query.name }).populate(populate);
                     res.send(posts);
                 }
                 else {
-                    const posts = yield this.model.find().populate("owner");
+                    const posts = yield this.model.find().populate(populate);
+                    ;
                     res.send(posts);
                 }
             }
@@ -41,9 +45,11 @@ class UserPostController extends base_controller_1.BaseController {
             const _id = req.user._id;
             req.body.owner = _id;
             try {
-                let post = yield this.model.create(req.body);
-                post = yield post.populate("owner");
-                yield user_model_1.default.findByIdAndUpdate({ $push: { posts: post._id } });
+                let post = yield this.model.create(Object.assign(Object.assign({}, req.body), { created_at: new Date() }));
+                post = yield post.populate([{
+                        path: "owner"
+                    }, { path: "comments", populate: { path: 'comment_owner' } }]);
+                yield user_model_1.default.findByIdAndUpdate(_id, { $push: { posts: post._id } });
                 res.status(201).send(post);
             }
             catch (err) {
@@ -55,7 +61,9 @@ class UserPostController extends base_controller_1.BaseController {
     getById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const post = yield this.model.findById(req.params.id).populate("owner");
+                const post = yield this.model.findById(req.params.id).populate([{
+                        path: "owner"
+                    }, { path: "comments", populate: { path: 'comment_owner' } }]);
                 res.send(post);
             }
             catch (err) {
@@ -83,7 +91,8 @@ class UserPostController extends base_controller_1.BaseController {
     putById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const post = yield this.model.findByIdAndUpdate(req.params.id, req.body, { returnOriginal: false });
+                const post = yield this.model.findByIdAndUpdate(req.params.id, req.body, { returnOriginal: false })
+                    .populate("owner");
                 res.status(201).send(post);
             }
             catch (err) {

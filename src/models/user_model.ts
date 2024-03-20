@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema<IUser>({
   },
   first_name:  {
     type: String,
-    required:true
+    required:false
   },
   last_name:  {
     type: String,
@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema<IUser>({
     type: String,
   },
 
-  posts: [{type: Schema.Types.ObjectId, ref:"User"}],
+  posts: [{type: Schema.Types.ObjectId, ref:"Post"}],
   refreshTokens: {
     type: [String],
     required: false,

@@ -5,17 +5,12 @@ import { IUser } from "./user_model";
 export interface IComment {
   _id?: string;
   message: string;
-  comment_owner_name?: string;
   comment_owner: (Schema.Types.ObjectId | IUser)
   post: (Schema.Types.ObjectId | IPost)
 }
 
 const commentScheme = new mongoose.Schema<IComment>({
   message: {
-    type: String,
-    required: true,
-  },
-  comment_owner_name: {
     type: String,
     required: true,
   },
@@ -29,4 +24,4 @@ const commentScheme = new mongoose.Schema<IComment>({
   },
 });
 
-export default mongoose.model<IComment>("Comment", commentScheme);
+export default mongoose.model<IComment>("Comment",commentScheme);

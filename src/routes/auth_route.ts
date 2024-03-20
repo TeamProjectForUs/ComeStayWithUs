@@ -108,6 +108,7 @@ router.post("/google", authController.googleSignin.bind(authController));
 */
 router.post("/login", authController.login.bind(authController));
 router.get("/me", authMiddleware, authController.me.bind(authController));
+router.put("/", authMiddleware, authController.editUser.bind(authController));
 
 /**
 * @swagger
