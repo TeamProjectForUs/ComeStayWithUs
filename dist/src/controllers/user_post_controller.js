@@ -31,7 +31,6 @@ class StudentPostController extends base_controller_1.BaseController {
                 }
                 else {
                     const posts = yield this.model.find().populate(populate);
-                    ;
                     res.send(posts);
                 }
             }
