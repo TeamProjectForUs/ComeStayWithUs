@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const user_post_model_1 = __importDefault(require("../models/user_post_model"));
 const base_controller_1 = require("./base_controller");
 const user_model_1 = __importDefault(require("../models/user_model"));
-class StudentPostController extends base_controller_1.BaseController {
+class UserPostController extends base_controller_1.BaseController {
     constructor() {
         super(user_post_model_1.default);
     }
@@ -28,7 +28,6 @@ class StudentPostController extends base_controller_1.BaseController {
                 }
                 else {
                     const posts = yield this.model.find().populate("owner");
-                    ;
                     res.send(posts);
                 }
             }
@@ -94,5 +93,5 @@ class StudentPostController extends base_controller_1.BaseController {
         });
     }
 }
-exports.default = new StudentPostController();
+exports.default = new UserPostController();
 //# sourceMappingURL=user_post_controller.js.map

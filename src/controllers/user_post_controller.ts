@@ -4,7 +4,7 @@ import { Response,Request } from "express";
 import { AuthResquest } from "../common/auth_middleware";
 import user_model from "../models/user_model";
 
-class StudentPostController extends BaseController<IPost> {
+class UserPostController extends BaseController<IPost> {
     constructor() {
         super(StudentPost)
     }
@@ -15,7 +15,7 @@ class StudentPostController extends BaseController<IPost> {
                 const posts = await this.model.find({ name: req.query.name }).populate("owner");
                 res.send(posts);
             } else {
-                const posts = await this.model.find().populate("owner");;
+                const posts = await this.model.find().populate("owner");
                 res.send(posts);
             }
         } catch (err) {
@@ -73,4 +73,4 @@ class StudentPostController extends BaseController<IPost> {
     }
 }
 
-export default new StudentPostController();
+export default new UserPostController();

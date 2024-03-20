@@ -1,4 +1,4 @@
-import mongoose, { Schema, SchemaType } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { IUser } from "./user_model";
 import { IComment } from "./post_comment";
 

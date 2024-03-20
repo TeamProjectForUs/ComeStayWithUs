@@ -6,10 +6,10 @@ export interface IUser {
   password: string;
   imgUrl?: string;
   _id?: string;
-  posts: (Schema.Types.ObjectId | IPost)[]
+  posts?: (Schema.Types.ObjectId | IPost)[]
   refreshTokens?: string[];
-  first_name: string
-  last_name: string
+  first_name?: string
+  last_name?: string
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema<IUser>({
   },
   last_name:  {
     type: String,
-    required:true
+    required:false
   },
   password: {
     type: String,
