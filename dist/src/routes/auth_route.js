@@ -106,6 +106,7 @@ router.post("/google", auth_controller_1.default.googleSignin.bind(auth_controll
 */
 router.post("/login", auth_controller_1.default.login.bind(auth_controller_1.default));
 router.get("/me", auth_middleware_1.default, auth_controller_1.default.me.bind(auth_controller_1.default));
+router.put("/", auth_middleware_1.default, auth_controller_1.default.editUser.bind(auth_controller_1.default));
 /**
 * @swagger
 * /auth/logout:

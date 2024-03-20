@@ -51,14 +51,6 @@ const postScheme = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
-    post_owner_first_name: {
-        type: String,
-        required: true
-    },
-    post_owner_last_name: {
-        type: String,
-        required: true
-    },
     capacity: {
         type: Number,
         required: true,
@@ -78,6 +70,10 @@ const postScheme = new mongoose_1.default.Schema({
     kosher_home: {
         type: Boolean,
         required: true
+    },
+    created_at: {
+        type: Date,
+        required: false
     },
     shabat_save: {
         type: Boolean,

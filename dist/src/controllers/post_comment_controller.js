@@ -24,13 +24,11 @@ class PostCommentController extends base_controller_1.BaseController {
             const _id = req.user._id;
             req.body.owner = _id;
             const message = req.body.message;
-            const owner_name = req.body.comment_owner_name;
             const postId = req.params.postId;
             try {
                 let comment = yield this.model.create({
-                    owner: _id,
+                    comment_owner: _id,
                     message,
-                    comment_owner_name: owner_name,
                     post: postId
                 });
                 comment = yield comment.populate("comment_owner");

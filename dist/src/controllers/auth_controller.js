@@ -132,10 +132,41 @@ const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
     }));
 });
+const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (req.body.editedPass) {
+            const salt = yield bcrypt_1.default.genSalt(10);
+            const encryptedPassword = yield bcrypt_1.default.hash(req.body.user.password, salt);
+            req.body.user.password = encryptedPassword;
+        }
+        const rs = yield user_model_1.default.findByIdAndUpdate(req.user._id, req.body.user, { returnOriginal: false })
+            .populate({
+            path: "posts",
+            populate: {
+                path: "comments",
+                populate: {
+                    path: "comment_owner"
+                }
+            }
+        });
+        res.status(200).send(rs);
+    }
+    catch (e) {
+        return res.status(400).send(e.message);
+    }
+});
 const me = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.user._id;
     try {
-        const user = yield user_model_2.default.findById(userId).populate("posts");
+        const user = yield user_model_2.default.findById(userId).populate({
+            path: "posts",
+            populate: {
+                path: "comments",
+                populate: {
+                    path: "comment_owner"
+                }
+            }
+        });
         return res.status(200).json(user);
     }
     catch (e) {
@@ -179,6 +210,7 @@ exports.default = {
     login,
     logout,
     me,
-    refresh
+    refresh,
+    editUser
 };
 //# sourceMappingURL=auth_controller.js.map

@@ -9,8 +9,6 @@ export interface IPost {
   comments: (Schema.Types.ObjectId | IComment)[];
   post_owner_email: string,
   post_owner_phone: string,
-  post_owner_first_name: string,
-  post_owner_last_name: string,
   capacity: number,
   date_start: Date,
   created_at: Date,
@@ -49,14 +47,6 @@ const postScheme = new mongoose.Schema<IPost>({
   post_owner_phone: {
     type: String,
     required: true,
-  },
-  post_owner_first_name: {
-    type: String,
-    required:true
-  },
-  post_owner_last_name: {
-    type: String,
-    required:true
   },
   capacity: {
     type: Number,
