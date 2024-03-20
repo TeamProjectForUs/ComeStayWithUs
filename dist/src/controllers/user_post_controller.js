@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const user_post_model_1 = __importDefault(require("../models/user_post_model"));
 const base_controller_1 = require("./base_controller");
 const user_model_1 = __importDefault(require("../models/user_model"));
-class UserPostController extends base_controller_1.BaseController {
+class StudentPostController extends base_controller_1.BaseController {
     constructor() {
         super(user_post_model_1.default);
     }
@@ -102,5 +102,5 @@ class UserPostController extends base_controller_1.BaseController {
         });
     }
 }
-exports.default = new UserPostController();
+exports.default = new StudentPostController();
 //# sourceMappingURL=user_post_controller.js.map
