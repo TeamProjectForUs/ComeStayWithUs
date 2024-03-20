@@ -11,22 +11,14 @@ class StudentPostController extends BaseController<IPost> {
     
     async get(req: Request, res: Response) {
         try {
-            const populateList = [
-                {
-                    path: "owner"
-                },
-                {
-                    path: "comments",
-                    populate: {
-                        path: "comment_owner"
-                    }
-                }
-            ]
+            const populate = [{
+                path:"owner"
+            }, {path: "comments", populate: { path: 'comment_owner'}}]
             if (req.query.name) {
-                const posts = await this.model.find(populateList);
+                const posts = await this.model.find({ name: req.query.name }).populate(populate);
                 res.send(posts);
             } else {
-                const posts = await this.model.find().populate(populateList);;
+                const posts = await this.model.find().populate(populate);;
                 res.send(posts);
             }
         } catch (err) {
@@ -38,8 +30,13 @@ class StudentPostController extends BaseController<IPost> {
         const _id = req.user._id;
         req.body.owner = _id;
         try {
-            let post = await this.model.create(req.body);
-            post = await post.populate("owner")
+            let post = await this.model.create({
+                ...req.body,
+                created_at: new Date()
+            });
+            post = await post.populate([{
+                path:"owner"
+            }, {path: "comments", populate: { path: 'comment_owner'}}])
             await user_model.findByIdAndUpdate(_id,{$push: {  posts: post._id}})
             res.status(201).send(post);
         } catch (err) {
@@ -50,7 +47,9 @@ class StudentPostController extends BaseController<IPost> {
 
     async getById(req: Request, res: Response) {
         try {
-            const post = await this.model.findById(req.params.id).populate("owner");
+            const post = await this.model.findById(req.params.id).populate([{
+                path:"owner"
+            }, {path: "comments", populate: { path: 'comment_owner'}}]);
             res.send(post);
         } catch (err) {
             res.status(500).json({ message: err.message });
@@ -75,7 +74,8 @@ class StudentPostController extends BaseController<IPost> {
     
     async putById(req: AuthResquest, res: Response) {
         try {
-            const post = await this.model.findByIdAndUpdate(req.params.id, req.body, {returnOriginal:false});
+            const post = await this.model.findByIdAndUpdate(req.params.id, req.body, {returnOriginal:false})
+            .populate("owner");
             res.status(201).send(post);
         } catch (err) {
             console.log(err);

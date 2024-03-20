@@ -13,6 +13,7 @@ export interface IPost {
   post_owner_last_name: string,
   capacity: number,
   date_start: Date,
+  created_at: Date,
   date_end: Date,
   imgUrl?: string,
   location: string,
@@ -76,6 +77,10 @@ const postScheme = new mongoose.Schema<IPost>({
   kosher_home: {
     type: Boolean,
     required:true
+  },
+  created_at: {
+    type:Date,
+    required:false
   },
   shabat_save: {
     type: Boolean,

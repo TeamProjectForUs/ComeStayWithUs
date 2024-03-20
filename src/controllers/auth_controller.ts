@@ -141,11 +141,35 @@ const logout = async (req: Request, res: Response) => {
     });
 }
 
+const editUser = async(req: Request, res: Response) => {
+    try {
+        if(req.body.editedPass) {
+            const salt = await bcrypt.genSalt(10);
+            const encryptedPassword = await bcrypt.hash(req.body.user.password, salt);
+            req.body.user.password = encryptedPassword
+        }
+        const rs = await User.findByIdAndUpdate(req.user._id, req.body.user, {returnOriginal:false})
+        .populate({
+            path: "posts",
+            populate: {
+                path: "comments"
+            }
+        });
+        res.status(200).send(rs);
+    } catch(e) {
+        return res.status(400).send(e.message);
+    }
+}
 
 const me = async (req: Request, res: Response) => {
     const userId = req.user._id!
      try {
-        const user = await user_model.findById(userId).populate("posts")
+        const user = await user_model.findById(userId).populate({
+            path: "posts",
+            populate: {
+                path: "comments"
+            }
+        })
         return res.status(200).json(user)
      } catch(e) { 
         return res.sendStatus(401);
@@ -189,5 +213,6 @@ export default {
     login,
     logout,
     me,
-    refresh
+    refresh,
+    editUser
 }
