@@ -18,7 +18,6 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const google_auth_library_1 = require("google-auth-library");
 const user_model_2 = __importDefault(require("../models/user_model"));
 const dotenv_1 = __importDefault(require("dotenv"));
-// a note for me
 dotenv_1.default.config();
 const client = new google_auth_library_1.OAuth2Client();
 const googleSignin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

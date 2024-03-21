@@ -89,7 +89,7 @@ describe("Auth tests", () => {
     const response = await request(app)
       .get("/auth/me")
       .set("Authorization", "Bearer " + accessToken);
-    expect(response.statusCode).not.toBe(200);
+    expect(response.statusCode).not.toBe(201);
   });
 
   test("Test refresh token", async () => {

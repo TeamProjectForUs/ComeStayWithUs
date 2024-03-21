@@ -18,7 +18,7 @@ class StudentPostController extends BaseController<IPost> {
                 const posts = await this.model.find({ name: req.query.name }).populate(populate);
                 res.send(posts);
             } else {
-                const posts = await this.model.find().populate(populate);
+                const posts = await this.model.find().populate(populate);;
                 res.send(posts);
             }
         } catch (err) {

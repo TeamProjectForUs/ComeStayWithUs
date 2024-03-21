@@ -33,7 +33,7 @@ class PostCommentController extends base_controller_1.BaseController {
                 });
                 comment = yield comment.populate("comment_owner");
                 yield user_post_model_1.default.findByIdAndUpdate(postId, { $push: { comments: comment._id } });
-                res.status(201).send(comment);
+                res.status(200).send(comment);
             }
             catch (err) {
                 console.log(err);

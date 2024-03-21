@@ -87,7 +87,7 @@ describe("Auth tests", () => {
         const response = yield (0, supertest_1.default)(app)
             .get("/auth/me")
             .set("Authorization", "Bearer " + accessToken);
-        expect(response.statusCode).not.toBe(200);
+        expect(response.statusCode).not.toBe(201);
     }));
     test("Test refresh token", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(app)

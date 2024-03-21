@@ -7,7 +7,7 @@ import { Document } from 'mongoose';
 import user_model from '../models/user_model';
 
 import dotenv from 'dotenv'
-// a note for me
+
 dotenv.config()
 
 const client = new OAuth2Client();

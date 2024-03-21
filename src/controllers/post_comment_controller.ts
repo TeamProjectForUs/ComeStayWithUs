@@ -23,7 +23,7 @@ class PostCommentController extends BaseController<IComment> {
             });
             comment = await comment.populate("comment_owner")
             await user_post_model.findByIdAndUpdate(postId, {$push: {  comments: comment._id}})
-            res.status(201).send(comment);
+            res.status(200).send(comment);
         } catch (err) {
             console.log(err);
             res.status(406).send("fail: " + err.message);

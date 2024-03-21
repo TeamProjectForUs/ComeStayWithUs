@@ -29,29 +29,29 @@ afterAll(async () => {
 });
 
 let post1: IPost = {
-  post_owner_email:"test@gmail.com",
-  post_owner_phone:"05544483933",
-  created_at:new Date(),
-  location:"Givat moshe",
-  title: "title1",
-  message: "message1",
-  kosher_home:true,
-  shabat_save:true,
-  handicap_home:true,
-  animals_home: true,
-  capacity:20,
-  comments:[],
-  date_start: new Date(Date.now() + 24 * 60 * 60 * 1000),
-  date_end: new Date(Date.now() + 24 * 60 * 60 * 1000),
-  owner:  user._id as any
-}
+    post_owner_email:"test@gmail.com",
+    post_owner_phone:"05544483933",
+    created_at:new Date(),
+    location:"Givat moshe",
+    title: "title1",
+    message: "message1",
+    kosher_home:true,
+    shabat_save:true,
+    handicap_home:true,
+    animals_home: true,
+    capacity:20,
+    comments:[],
+    date_start: new Date(Date.now() + 24 * 60 * 60 * 1000),
+    date_end: new Date(Date.now() + 24 * 60 * 60 * 1000),
+    owner:  user._id as any
+  }
 
 describe("Student post tests", () => {
   const addStudentPost = async (post: IPost) => {
     const response = await request(app)
-      .post("/post")
-      .set("Authorization", "Bearer " + accessToken)
-      .send(post);
+        .post("/post")
+        .set("Authorization", "Bearer " + accessToken)
+        .send(post);
     post1._id  = response.body._id
     expect(response.statusCode).toBe(201);
     expect(response.body.owner._id).toBe(user._id);
@@ -83,6 +83,7 @@ describe("Student post tests", () => {
   };
 
 
+
   test("Test Get All Student posts - empty response", async () => {
     const response = await request(app).get("/post");
     expect(response.statusCode).toBe(200);
@@ -91,23 +92,23 @@ describe("Student post tests", () => {
 
   test("Test Post Student post", async () => {
     await addStudentPost(post1);
-  });
+});
 
-  test("Test Put Student post (Edit)" , async () => {
-    await editStudentPost({ title: "New title!" });
-  });
+test("Test Put Student post (Edit)" , async () => {
+  await editStudentPost({ title: "New title!" });
+});
 
-  test("Test Get All Students posts with one post in DB", async () => {
-    const response = await request(app).get("/post");
-    expect(response.statusCode).toBe(200);
-    const rc = response.body[0];
-    expect(rc.title).toBe(post1.title);
-    expect(rc.message).toBe(post1.message);
-    expect(rc.owner._id).toBe(user._id);
-  });
+test("Test Get All Students posts with one post in DB", async () => {
+const response = await request(app).get("/post");
+expect(response.statusCode).toBe(200);
+const rc = response.body[0];
+expect(rc.title).toBe(post1.title);
+expect(rc.message).toBe(post1.message);
+expect(rc.owner._id).toBe(user._id);
+});
 
-  test("Test Delete Student pos" , async () => {
-    await deleteStudentPost()
-  });
+test("Test Delete Student pos" , async () => {
+  await deleteStudentPost()
+});
 
 });
