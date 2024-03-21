@@ -36,37 +36,77 @@ beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
 afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
     yield mongoose_1.default.connection.close();
 }));
-const post1 = {
+let post1 = {
+    post_owner_email: "test@gmail.com",
+    post_owner_phone: "05544483933",
+    created_at: new Date(),
+    location: "Givat moshe",
     title: "title1",
     message: "message1",
-    owner: "1234567890",
-}; // fix typing to match IPost
+    kosher_home: true,
+    shabat_save: true,
+    handicap_home: true,
+    animals_home: true,
+    capacity: 20,
+    comments: [],
+    date_start: new Date(Date.now() + 24 * 60 * 60 * 1000),
+    date_end: new Date(Date.now() + 24 * 60 * 60 * 1000),
+    owner: user._id
+};
 describe("Student post tests", () => {
     const addStudentPost = (post) => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(app)
-            .post("/studentpost")
-            .set("Authorization", "JWT " + accessToken)
+            .post("/post")
+            .set("Authorization", "Bearer " + accessToken)
             .send(post);
+        post1._id = response.body._id;
         expect(response.statusCode).toBe(201);
-        expect(response.body.owner).toBe(user._id);
+        expect(response.body.owner._id).toBe(user._id);
         expect(response.body.title).toBe(post.title);
         expect(response.body.message).toBe(post.message);
     });
+    const editStudentPost = (post) => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(app)
+            .put(`/post/${post1._id}`)
+            .set("Authorization", "Bearer " + accessToken)
+            .send(post);
+        post1 = response.body;
+        expect(response.statusCode).toBe(201);
+        expect(response.body.owner._id).toBe(user._id);
+        expect(response.body.title).toBe(post.title);
+        expect(response.body.message).toBe(post1.message);
+    });
+    const deleteStudentPost = () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(app)
+            .delete(`/post/${post1._id}`)
+            .set("Authorization", "Bearer " + accessToken)
+            .send();
+        expect(response.statusCode).toBe(200);
+        const response2 = yield (0, supertest_1.default)(app).get("/post");
+        expect(response2.statusCode).toBe(200);
+        expect(response2.body).toStrictEqual([]);
+    });
     test("Test Get All Student posts - empty response", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(app).get("/studentpost");
+        const response = yield (0, supertest_1.default)(app).get("/post");
         expect(response.statusCode).toBe(200);
         expect(response.body).toStrictEqual([]);
     }));
     test("Test Post Student post", () => __awaiter(void 0, void 0, void 0, function* () {
-        addStudentPost(post1);
+        yield addStudentPost(post1);
+    }));
+    test("Test Put Student post (Edit)", () => __awaiter(void 0, void 0, void 0, function* () {
+        yield editStudentPost({ title: "New title!" });
     }));
     test("Test Get All Students posts with one post in DB", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(app).get("/studentpost");
+        const response = yield (0, supertest_1.default)(app).get("/post");
         expect(response.statusCode).toBe(200);
         const rc = response.body[0];
         expect(rc.title).toBe(post1.title);
         expect(rc.message).toBe(post1.message);
-        expect(rc.owner).toBe(user._id);
+        expect(rc.owner._id).toBe(user._id);
+    }));
+    test("Test Delete Student pos", () => __awaiter(void 0, void 0, void 0, function* () {
+        yield deleteStudentPost();
     }));
 });
 //# sourceMappingURL=student_post.test.js.map

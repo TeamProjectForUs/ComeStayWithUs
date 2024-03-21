@@ -79,7 +79,7 @@ class StudentPostController extends base_controller_1.BaseController {
                 }
                 const post = yield this.model.findByIdAndDelete(req.params.id);
                 yield user_model_1.default.findByIdAndUpdate(req.user._id, { $pull: { posts: req.params.id } });
-                res.status(201).send(post);
+                res.status(200).send(post);
             }
             catch (err) {
                 console.log(err);

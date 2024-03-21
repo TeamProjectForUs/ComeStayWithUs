@@ -65,7 +65,7 @@ class StudentPostController extends BaseController<IPost> {
             }
             const post = await this.model.findByIdAndDelete(req.params.id);
             await user_model.findByIdAndUpdate(req.user._id, {$pull: {  posts: req.params.id}})
-            res.status(201).send(post);
+            res.status(200).send(post);
         } catch (err) {
             console.log(err);
             res.status(406).send("fail: " + err.message);

@@ -28,41 +28,86 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
-const post1: IPost = {
+let post1: IPost = {
+  post_owner_email:"test@gmail.com",
+  post_owner_phone:"05544483933",
+  created_at:new Date(),
+  location:"Givat moshe",
   title: "title1",
   message: "message1",
-  owner: "1234567890" as any,
-} as any; // fix typing to match IPost
+  kosher_home:true,
+  shabat_save:true,
+  handicap_home:true,
+  animals_home: true,
+  capacity:20,
+  comments:[],
+  date_start: new Date(Date.now() + 24 * 60 * 60 * 1000),
+  date_end: new Date(Date.now() + 24 * 60 * 60 * 1000),
+  owner:  user._id as any
+}
 
 describe("Student post tests", () => {
   const addStudentPost = async (post: IPost) => {
     const response = await request(app)
-      .post("/studentpost")
-      .set("Authorization", "JWT " + accessToken)
+      .post("/post")
+      .set("Authorization", "Bearer " + accessToken)
       .send(post);
+    post1._id  = response.body._id
     expect(response.statusCode).toBe(201);
-    expect(response.body.owner).toBe(user._id);
+    expect(response.body.owner._id).toBe(user._id);
     expect(response.body.title).toBe(post.title);
     expect(response.body.message).toBe(post.message);
   };
 
+  const editStudentPost = async (post: Partial<IPost>) => {
+    const response = await request(app)
+      .put(`/post/${post1._id}`)
+      .set("Authorization", "Bearer " + accessToken)
+      .send(post);
+    post1 = response.body 
+    expect(response.statusCode).toBe(201);
+    expect(response.body.owner._id).toBe(user._id);
+    expect(response.body.title).toBe(post.title);
+    expect(response.body.message).toBe(post1.message);
+  };
+
+  const deleteStudentPost = async () => {
+    const response = await request(app)
+      .delete(`/post/${post1._id}`)
+      .set("Authorization", "Bearer " + accessToken)
+      .send()
+    expect(response.statusCode).toBe(200);
+    const response2 = await request(app).get("/post");
+    expect(response2.statusCode).toBe(200);
+    expect(response2.body).toStrictEqual([]);
+  };
+
+
   test("Test Get All Student posts - empty response", async () => {
-    const response = await request(app).get("/studentpost");
+    const response = await request(app).get("/post");
     expect(response.statusCode).toBe(200);
     expect(response.body).toStrictEqual([]);
   });
 
   test("Test Post Student post", async () => {
-    addStudentPost(post1);
+    await addStudentPost(post1);
+  });
+
+  test("Test Put Student post (Edit)" , async () => {
+    await editStudentPost({ title: "New title!" });
   });
 
   test("Test Get All Students posts with one post in DB", async () => {
-    const response = await request(app).get("/studentpost");
+    const response = await request(app).get("/post");
     expect(response.statusCode).toBe(200);
     const rc = response.body[0];
     expect(rc.title).toBe(post1.title);
     expect(rc.message).toBe(post1.message);
-    expect(rc.owner).toBe(user._id);
+    expect(rc.owner._id).toBe(user._id);
+  });
+
+  test("Test Delete Student pos" , async () => {
+    await deleteStudentPost()
   });
 
 });
