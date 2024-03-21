@@ -30,21 +30,21 @@ class PostCommentController extends BaseController<IComment> {
         }
     }
 
-    async deleteById(req: AuthResquest, res: Response) {
-        try {
-            const comment_ = await this.model.findById(req.params.id).populate("post");
-            if(comment_.comment_owner.toString() !== req.user._id.toString()
-            && (comment_.post as IPost).owner.toString() !== req.user._id.toString()) {
-                res.status(401).send("Unauthorized");
-            }
-            const comment = await this.model.findByIdAndDelete(req.params.id);
-            await user_post_model.findByIdAndUpdate(comment.value.post, {$pull: {  comments: req.params.id}})
-            res.status(201).send(comment);
-        } catch (err) {
-            console.log(err);
-            res.status(406).send("fail: " + err.message);
-        }
-    }
+    // async deleteById(req: AuthResquest, res: Response) {
+    //     try {
+    //         const comment_ = await this.model.findById(req.params.id).populate("post");
+    //         if(comment_.comment_owner.toString() !== req.user._id.toString()
+    //         && (comment_.post as IPost).owner.toString() !== req.user._id.toString()) {
+    //             res.status(401).send("Unauthorized");
+    //         }
+    //         const comment = await this.model.findByIdAndDelete(req.params.id);
+    //         await user_post_model.findByIdAndUpdate(comment.value.post, {$pull: {  comments: req.params.id}})
+    //         res.status(201).send(comment);
+    //     } catch (err) {
+    //         console.log(err);
+    //         res.status(406).send("fail: " + err.message);
+    //     }
+    // }
 
 
     async putById(req: AuthResquest, res: Response) {
