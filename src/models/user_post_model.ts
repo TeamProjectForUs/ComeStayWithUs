@@ -3,6 +3,7 @@ import { IUser } from "./user_model";
 import { IComment } from "./post_comment";
 
 export interface IPost {
+  _id?: Schema.Types.ObjectId 
   title: string;
   message: string;
   owner: Schema.Types.ObjectId | IUser;
